@@ -315,9 +315,10 @@ p {
     margin-top: 40px;
 }
 
+/* === MODERATER GRID - 4列固定 === */
 .moderater-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 25px;
     margin-top: 30px;
     justify-items: center;
@@ -327,7 +328,8 @@ p {
     background: linear-gradient(135deg, #222 0%, #2a2a2a 100%);
     padding: 20px;
     border-radius: 15px;
-    width: 200px;
+    width: 100%;
+    max-width: 250px;
     text-align: center;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -474,6 +476,11 @@ footer p {
         padding: 6px 12px;
         font-size: 14px;
     }
+    
+    /* モデレーターグリッド: 3列 */
+    .moderater-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -543,6 +550,11 @@ footer p {
         flex-direction: column;
         align-items: center;
     }
+    
+    /* モデレーターグリッド: 2列 */
+    .moderater-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 480px) {
@@ -585,5 +597,10 @@ footer p {
     
     .hero p {
         font-size: 16px;
+    }
+    
+    /* モデレーターグリッド: 1列 */
+    .moderater-grid {
+        grid-template-columns: 1fr;
     }
 }
