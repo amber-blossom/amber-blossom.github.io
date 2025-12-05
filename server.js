@@ -65,6 +65,11 @@ app.use(express.static(path.join(__dirname, 'public'), {
         if (path.endsWith('.html')) {
             res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
         }
+        // 画像の保存・ドラッグを防止するヘッダー
+        if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
+            res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+            res.set('X-Content-Type-Options', 'nosniff');
+        }
     }
 }));
 
@@ -96,7 +101,8 @@ app.use((req, res, next) => {
 
 // Discord Bot設定（環境変数から読み込み）
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
-const DISCORD_SERVER_ID = process.env.DISCORD_SERVER_ID;
+// 指定されたサーバーIDを使用
+const DISCORD_SERVER_ID = process.env.DISCORD_SERVER_ID || '1315647461989285918';
 
 // HTML ページのルート設定（.html拡張子なし）
 const htmlPages = [
@@ -107,8 +113,8 @@ const htmlPages = [
     'status',
     'servers',
     'akane',
-    'koharu'
-    'servers'
+    'koharu',
+    'servers',
     '404'
 ];
 
@@ -164,12 +170,12 @@ blockedPaths.forEach(blockedPath => {
 // API用レート制限適用
 app.use('/api', apiLimiter);
 
-// Discord APIからサーバー統計を取得
+// Discord APIからサーバー統計を取得（指定サーバーID: 1315647461989285918）
 app.get('/api/discord/stats', async (req, res) => {
     try {
         logAccess(req, 'api');
         
-        if (!DISCORD_BOT_TOKEN || !DISCORD_SERVER_ID) {
+        if (!DISCORD_BOT_TOKEN) {
             return res.status(200).json({
                 memberCount: '設定なし',
                 onlineCount: '設定なし',
@@ -177,7 +183,7 @@ app.get('/api/discord/stats', async (req, res) => {
             });
         }
 
-        // Discord APIからギルド情報を取得
+        // Discord APIからギルド情報を取得（指定サーバー）
         const guildResponse = await fetch(`https://discord.com/api/v10/guilds/${DISCORD_SERVER_ID}?with_counts=true`, {
             headers: {
                 'Authorization': `Bot ${DISCORD_BOT_TOKEN}`,
@@ -212,6 +218,7 @@ app.get('/api/discord/stats', async (req, res) => {
             memberCount: guildData.approximate_member_count || guildData.member_count || '取得失敗',
             onlineCount: onlineCount,
             serverName: guildData.name,
+            serverId: DISCORD_SERVER_ID,
             success: true,
             timestamp: new Date().toISOString()
         });
@@ -451,13 +458,11 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log(`Access the website at: http://localhost:${PORT}`);
+    console.log(`Target Discord Server ID: ${DISCORD_SERVER_ID}`);
     
     // 環境変数チェック
     if (!DISCORD_BOT_TOKEN) {
         console.warn('Warning: DISCORD_BOT_TOKEN is not set');
-    }
-    if (!DISCORD_SERVER_ID) {
-        console.warn('Warning: DISCORD_SERVER_ID is not set');
     }
 });
 

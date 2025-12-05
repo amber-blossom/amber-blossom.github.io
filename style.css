@@ -604,3 +604,12 @@ footer p {
         grid-template-columns: 1fr;
     }
 }
+/* サポートメンバー画像の保護 */
+.team-member img,
+.support-team img,
+img.member-avatar {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+}
