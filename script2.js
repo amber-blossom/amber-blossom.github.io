@@ -25,7 +25,7 @@ document.getElementById("contactForm").addEventListener("submit", async function
     }
 
     // ▼ Discord Webhook
-    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/xxxx/yyyy";
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1448933235261182104/pJDAPJC0a6u-ZZbWTGiYZBPrhNKEyzfYHmA2YaZpWGBbViFKrjy3Im8Imp_UzxX5uOQC";
 
     try {
         await fetch(DISCORD_WEBHOOK, {
