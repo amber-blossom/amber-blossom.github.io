@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>お問い合わせフォーム</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- reCAPTCHA v3 -->
-<script src="https://www.google.com/recaptcha/api.js?render=YOUR_RECAPTCHA_SITE_KEY"></script>
+<title>お問い合わせ</title>
+
+<link rel="icon" href="/images/favicon.ico" id="favicon">
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
 
 <style>
     body {
@@ -23,7 +25,7 @@
     }
 
     .form-wrapper {
-        max-width: 500px;
+        max-width: 600px;
         margin: 0 auto;
         background: #fff;
         padding: 25px;
@@ -59,6 +61,15 @@
         resize: vertical;
     }
 
+    .captcha-box {
+        margin: 15px 0;
+        padding: 12px;
+        background: #eef3ff;
+        border-left: 4px solid #3b82f6;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
     button {
         margin-top: 15px;
         width: 100%;
@@ -77,106 +88,43 @@
         background: #2563eb;
     }
 
-    .success {
+    #resultMessage {
+        text-align: center;
+        margin-top: 20px;
+        font-weight: bold;
         color: #10b981;
-        margin-top: 15px;
-        text-align: center;
-        font-weight: bold;
-    }
-
-    .error {
-        color: #ef4444;
-        margin-top: 15px;
-        text-align: center;
-        font-weight: bold;
     }
 </style>
 </head>
 
 <body>
+
 <h1>お問い合わせ</h1>
 
 <div class="form-wrapper">
     <form id="contactForm">
         <label>お名前</label>
-        <input type="text" id="name" required />
+        <input type="text" name="name" required>
 
         <label>メールアドレス</label>
-        <input type="email" id="email" required />
+        <input type="email" name="email" required>
 
-        <label>メッセージ</label>
-        <textarea id="message" required></textarea>
+        <label>件名</label>
+        <input type="text" name="subject" required>
+
+        <label>内容</label>
+        <textarea name="message" required></textarea>
+
+        <div class="captcha-box">
+            <span id="captchaText"></span><br>
+            <input type="number" id="captchaInput" placeholder="答えを入力" required>
+        </div>
 
         <button type="submit">送信する</button>
     </form>
-    <div id="status"></div>
+
+    <p id="resultMessage"></p>
 </div>
-
-<script>
-    const form = document.getElementById("contactForm");
-    const status = document.getElementById("status");
-
-    let isFormDirty = false;
-
-    // 入力チェック（リロード確認用）
-    form.addEventListener("input", () => {
-        isFormDirty = true;
-    });
-
-    // ページ離脱時の警告
-    window.addEventListener("beforeunload", function (e) {
-        if (isFormDirty) {
-            e.preventDefault();
-            e.returnValue = "";
-        }
-    });
-
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
-
-        status.textContent = "";
-        status.className = "";
-
-        const name = document.getElementById("name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const message = document.getElementById("message").value.trim();
-
-        // --- reCAPTCHA v3 トークン取得 ---
-        grecaptcha.ready(() => {
-            grecaptcha.execute("YOUR_RECAPTCHA_SITE_KEY", {action: "submit"}).then(token => {
-                
-                // Webhook に送信（メールなし）
-                const webhookURL = "https://discord.com/api/webhooks/1448933235261182104/pJDAPJC0a6u-ZZbWTGiYZBPrhNKEyzfYHmA2YaZpWGBbViFKrjy3Im8Imp_UzxX5uOQC"; // ←必ず変更
-
-                fetch(webhookURL, {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        message,
-                        recaptchaToken: token
-                    })
-                })
-                .then(res => {
-                    if (res.ok) {
-                        status.textContent = "送信しました！ありがとうございます。";
-                        status.className = "success";
-                        form.reset();
-                        isFormDirty = false;
-                    } else {
-                        status.textContent = "送信に失敗しました。";
-                        status.className = "error";
-                    }
-                })
-                .catch(() => {
-                    status.textContent = "エラーが発生しました。";
-                    status.className = "error";
-                });
-            });
-        });
-    });
-</script>
 
 </body>
 </html>

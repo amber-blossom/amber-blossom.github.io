@@ -5,6 +5,20 @@ let answer = num1 + num2;
 
 document.getElementById("captchaText").innerText = `認証： ${num1} + ${num2} = ?`;
 
+let isFormDirty = false;
+
+// 入力が始まったらリロード警告ON
+document.querySelectorAll("#contactForm input, #contactForm textarea")
+    .forEach(el => el.addEventListener("input", () => {
+        isFormDirty = true;
+    }));
+
+window.addEventListener("beforeunload", function (e) {
+    if (isFormDirty) {
+        e.preventDefault();
+        e.returnValue = "";
+    }
+});
 
 // ---- フォーム送信 ----
 document.getElementById("contactForm").addEventListener("submit", async function(e) {
@@ -32,7 +46,7 @@ document.getElementById("contactForm").addEventListener("submit", async function
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                username: "お問い合わせフォーム", // ← Webhook名
+                username: "お問い合わせフォーム", 
                 embeds: [
                     {
                         title: "📩 お問い合わせが届きました",
@@ -52,6 +66,8 @@ document.getElementById("contactForm").addEventListener("submit", async function
         // 成功メッセージ
         document.getElementById("resultMessage").innerText =
             "ご回答ありがとうございます。ページを移動します…";
+
+        isFormDirty = false;
 
         // 1.5秒後にトップへ
         setTimeout(() => {
