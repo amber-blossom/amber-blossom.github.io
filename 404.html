@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - ページが見つかりません | amber-blossom</title>
     <link rel="stylesheet" href="style.css">
-<link rel="icon" href="/images/favicon.ico" id="favicon">
+    <link rel="icon" href="/images/favicon.ico" id="favicon">
     <style>
         .error-container {
             text-align: center;
             padding: 80px 20px;
-            min-height: 60vh;
+            min-height: 70vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -18,16 +18,30 @@
         }
         
         .error-code {
-            font-size: 120px;
+            font-size: 150px;
             font-weight: bold;
-            color: #f39c12;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-shadow: 0 4px 8px rgba(0,0,0,0.3);
             margin-bottom: 20px;
             line-height: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
         }
         
         .error-message {
-            font-size: 28px;
+            font-size: 32px;
             color: #fff;
             margin-bottom: 15px;
             font-weight: 600;
@@ -38,7 +52,7 @@
             color: #bbb;
             margin-bottom: 40px;
             max-width: 600px;
-            line-height: 1.6;
+            line-height: 1.8;
         }
         
         .error-actions {
@@ -46,13 +60,14 @@
             gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
+            margin-bottom: 60px;
         }
         
         .back-btn {
             background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
             color: #111;
             border: none;
-            padding: 15px 30px;
+            padding: 15px 35px;
             font-size: 16px;
             font-weight: 600;
             border-radius: 10px;
@@ -74,7 +89,7 @@
             background: transparent;
             color: #f39c12;
             border: 2px solid #f39c12;
-            padding: 15px 30px;
+            padding: 15px 35px;
             font-size: 16px;
             font-weight: 600;
             border-radius: 10px;
@@ -93,55 +108,103 @@
             box-shadow: 0 8px 25px rgba(243, 156, 18, 0.4);
         }
         
-        .error-animation {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
         .popular-links {
-            margin-top: 60px;
-            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
         }
         
         .popular-links h3 {
             color: #f39c12;
             margin-bottom: 30px;
             font-size: 24px;
+            text-align: center;
         }
         
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
         
         .link-card {
             background: linear-gradient(135deg, #2d2d2d 0%, #333 100%);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 15px;
             transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            cursor: pointer;
         }
         
         .link-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(243, 156, 18, 0.2);
+            border-color: rgba(243, 156, 18, 0.3);
         }
         
-        .link-card a {
+        .link-card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .link-card-title {
             color: #fff;
-            text-decoration: none;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
         
-        .link-card a:hover {
+        .link-card-description {
+            color: #bbb;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .link-card-btn {
+            display: inline-block;
+            background: rgba(243, 156, 18, 0.1);
             color: #f39c12;
+            padding: 8px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card-btn:hover {
+            background: #f39c12;
+            color: #111;
+        }
+        
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 100px;
+            }
+            
+            .error-message {
+                font-size: 24px;
+            }
+            
+            .error-description {
+                font-size: 16px;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .back-btn, .home-btn {
+                width: 100%;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -150,19 +213,22 @@
         <div class="logo">amber-blossom</div>
         <nav>
             <ul>        
-                <a class="fas fa-home" onclick="location.href='https://amber-blossom.github.io/'">ホーム</a>
-                <a class="fas fa-tools" onclick="location.href='https://amber-blossom.github.io/terms'">利用規約</a>
-        　　　　　<a class="fas fa-tools" onclick="location.href='https://amber-blossom.github.io/privacy'">プライバシーポリシー</a>
-        　　　　　<a class="fas fa-tools" onclick="location.href='https://amber-blossom.github.io/status'">Botステータス</a>
-                <a class="fas fa-list" onclick="location.href='https://amber-blossom.github.io/servers'">連携サーバー一覧</a>
-                <div id="clock" class="clock">--:--:--</div>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="terms.html">利用規約</a></li>
+                <li><a href="privacy.html">プライバシーポリシー</a></li>
+                <li><a href="status.html">Botステータス</a></li>
+                <li><a href="servers.html">連携サーバー一覧</a></li>
             </ul>
         </nav>
+        <div class="header-right">
+            <div id="clock" class="clock">--:--:--</div>
+        </div>
     </header>
 
     <main>
         <div class="error-container">
-            <div class="error-code error-animation">404</div>
+            <div class="error-icon">🔍</div>
+            <div class="error-code">404</div>
             <h1 class="error-message">ページが見つかりません</h1>
             <p class="error-description">
                 申し訳ございません。お探しのページは存在しないか、移動された可能性があります。<br>
@@ -170,30 +236,32 @@
             </p>
             
             <div class="error-actions">
-                <button class="back-btn" onclick="history.back()">前のページに戻る</button>
-                <a href="/index" class="home-btn">ホームページへ</a>
+                <button class="back-btn" onclick="history.back()">← 前のページに戻る</button>
+                <a href="index.html" class="home-btn">🏠 ホームページへ</a>
             </div>
             
             <div class="popular-links">
                 <h3>よく使われるページ</h3>
                 <div class="links-grid">
-                    <div class="link-card">
-                            <strong>Botステータス</strong><br>
-                            <small>稼働状況確認</small>
-        <a class="fas fa-tools" onclick="location.href='https://amber-blossom.github.io/status'">link</a>
-                    </a>
+                    <div class="link-card" onclick="location.href='status.html'">
+                        <div class="link-card-icon">📊</div>
+                        <div class="link-card-title">Botステータス</div>
+                        <div class="link-card-description">リアルタイムで稼働状況を確認できます</div>
+                        <span class="link-card-btn">詳しく見る →</span>
                     </div>
-                    <div class="link-card">
-                            <strong>連携サーバー</strong><br>
-                            <small>サーバー一覧</small>
-        <a class="fas fa-list" onclick="location.href='https://amber-blossom.github.io/servers'">link</a>
-                    </a>
+                    
+                    <div class="link-card" onclick="location.href='servers.html'">
+                        <div class="link-card-icon">🖥️</div>
+                        <div class="link-card-title">連携サーバー一覧</div>
+                        <div class="link-card-description">Botが参加しているサーバーの一覧</div>
+                        <span class="link-card-btn">詳しく見る →</span>
                     </div>
-                    <div class="link-card">
-                            <strong>茜-あかね-</strong><br>
-                            <small>多機能botです。ログインボーナスなどを備えています</small>
-        <a class="fas fa-home" onclick="location.href='https://amber-blossom.github.io/akane/'">link</a>
-                    </a>
+                    
+                    <div class="link-card" onclick="location.href='akane/index.html'">
+                        <div class="link-card-icon">💬</div>
+                        <div class="link-card-title">お問い合わせ</div>
+                        <div class="link-card-description">なにかお困りごとがあればこちらへ</div>
+                        <span class="link-card-btn">詳しく見る →</span>
                     </div>
                 </div>
             </div>
@@ -201,25 +269,28 @@
     </main>
 
     <footer>
-        <p>&copy; 2024-2025 amber-blossom team</p>
+        <p>&copy; 2024-2025 amber-blossom. All rights reserved.</p>
     </footer>
 
     <script>
         // 時計機能
         function updateClock() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString('ja-JP');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
             const clockElement = document.getElementById('clock');
             if (clockElement) {
-                clockElement.textContent = timeString;
+                clockElement.textContent = `${hours}:${minutes}:${seconds}`;
             }
         }
         
         setInterval(updateClock, 1000);
         updateClock();
 
-        // エラーページのアクセスをログに記録（開発用）
+        // 404エラーのログ記録
         console.log('404 Error - Page not found:', window.location.href);
+        console.log('Referrer:', document.referrer || 'Direct access');
     </script>
 
     <!-- Google tag (gtag.js) -->
@@ -228,7 +299,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-7Q3C5WF65W');
     </script>
 </body>
