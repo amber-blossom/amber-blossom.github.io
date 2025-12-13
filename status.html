@@ -162,10 +162,21 @@
         .error-message {
             background: linear-gradient(135deg, #2d1f1f 0%, #3d2020 100%);
             color: #ff6b6b;
-            padding: 20px;
+            padding: 40px;
             border-radius: 10px;
             text-align: center;
             border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .error-message h3 {
+            margin: 0 0 15px 0;
+            color: #ff6b6b;
+        }
+
+        .error-message p {
+            margin: 10px 0;
+            color: #ffb3b3;
+            font-size: 16px;
         }
 
         .loading {
@@ -191,6 +202,25 @@
             color: #666;
             font-size: 12px;
             margin-top: 20px;
+        }
+
+        .connection-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .connection-status.connected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .connection-status.disconnected {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
         }
 
         @media (max-width: 768px) {
@@ -222,18 +252,12 @@
         </nav>
         <div class="header-right">
             <div id="clock" class="clock">--:--:--</div>
-            <button id="lang-toggle">EN</button>
-            <div class="user-info">
-                <img id="user-avatar" alt="User Avatar">
-                <button id="login-btn">Login with Discord</button>
-                <button id="logout-btn" style="display: none;">Logout</button>
-            </div>
         </div>
     </header>
 
     <main>
         <div class="status-dashboard">
-            <h2>茜-あかね- Status</h2>
+            <h2>🤖 茜-あかね- Status</h2>
             <div id="status-content">
                 <div class="loading">読み込み中</div>
             </div>
@@ -251,33 +275,111 @@
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+            const clockEl = document.getElementById('clock');
+            if (clockEl) {
+                clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+            }
         }
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Status API
+        // Status API設定
         const API_URL = 'http://217.154.173.102:9461/api/status';
         const UPDATE_INTERVAL = 5000; // 5秒ごとに更新
+        let consecutiveErrors = 0;
+        let isConnected = false;
 
+        // 数値を安全にフォーマット
+        function safeNumber(value, decimals = 2) {
+            const num = parseFloat(value);
+            return isNaN(num) ? '0' : num.toFixed(decimals);
+        }
+
+        // 整数を安全にフォーマット
+        function safeInteger(value) {
+            const num = parseInt(value);
+            return isNaN(num) ? 0 : num;
+        }
+
+        // ステータス取得
         async function fetchStatus() {
             try {
-                const response = await fetch(API_URL);
-                if (!response.ok) throw new Error('API request failed');
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    // タイムアウト設定
+                    signal: AbortSignal.timeout(10000) // 10秒
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
                 
                 const data = await response.json();
+                
+                // データ検証
+                if (!data || typeof data !== 'object') {
+                    throw new Error('Invalid response format');
+                }
+
                 displayStatus(data);
+                consecutiveErrors = 0;
+                isConnected = true;
+
             } catch (error) {
                 console.error('Status fetch error:', error);
-                displayError();
+                consecutiveErrors++;
+                isConnected = false;
+                
+                displayError(error);
             }
         }
 
+        // ステータス表示
         function displayStatus(data) {
+            // デフォルト値設定
+            const online = data.online !== false;
+            const ping = safeInteger(data.ping);
+            const servers = safeInteger(data.servers);
+            const users = safeInteger(data.users);
+            
+            // CPU情報
+            const cpuUsage = safeNumber(data.cpu?.usage || 0);
+            const cpuCores = safeInteger(data.cpu?.cores || 0);
+            
+            // メモリ情報（Bot）
+            const botMemUsed = safeNumber(data.memory?.bot?.used || 0);
+            const botMemTotal = safeNumber(data.memory?.bot?.total || 0);
+            const botMemPercentage = botMemTotal > 0 
+                ? ((botMemUsed / botMemTotal) * 100).toFixed(1) 
+                : '0.0';
+            
+            // メモリ情報（System）
+            const sysMemUsed = safeNumber(data.memory?.system?.used || 0);
+            const sysMemTotal = safeNumber(data.memory?.system?.total || 0);
+            const sysMemPercentage = safeNumber(data.memory?.system?.percentage || 0, 1);
+            
+            // アップタイム
+            const uptime = data.uptime?.formatted || '0日 0時間 0分 0秒';
+            
+            // 最終更新時刻
+            const lastUpdate = data.lastUpdate 
+                ? new Date(data.lastUpdate).toLocaleString('ja-JP', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                })
+                : '不明';
+
             const statusHTML = `
                 <div class="status-header">
-                    <div class="status-indicator ${data.online ? 'online' : 'offline'}"></div>
-                    <h3>${data.online ? 'オンライン' : 'オフライン'}</h3>
+                    <div class="status-indicator ${online ? 'online' : 'offline'}"></div>
+                    <h3>${online ? 'オンライン' : 'オフライン'}</h3>
                 </div>
 
                 <div class="stats-grid">
@@ -286,7 +388,7 @@
                             <div class="stat-icon">🏓</div>
                             <h4>Ping</h4>
                         </div>
-                        <div class="stat-value">${data.ping}</div>
+                        <div class="stat-value">${ping}</div>
                         <div class="stat-label">ミリ秒</div>
                     </div>
 
@@ -295,7 +397,7 @@
                             <div class="stat-icon">🖥️</div>
                             <h4>サーバー数</h4>
                         </div>
-                        <div class="stat-value">${data.servers.toLocaleString()}</div>
+                        <div class="stat-value">${servers.toLocaleString()}</div>
                         <div class="stat-label">参加中のサーバー</div>
                     </div>
 
@@ -304,7 +406,7 @@
                             <div class="stat-icon">👥</div>
                             <h4>ユーザー数</h4>
                         </div>
-                        <div class="stat-value">${data.users.toLocaleString()}</div>
+                        <div class="stat-value">${users.toLocaleString()}</div>
                         <div class="stat-label">総ユーザー数</div>
                     </div>
 
@@ -313,8 +415,8 @@
                             <div class="stat-icon">⚙️</div>
                             <h4>CPU</h4>
                         </div>
-                        <div class="stat-value">${data.cpu.usage}%</div>
-                        <div class="stat-label">${data.cpu.cores} コア</div>
+                        <div class="stat-value">${cpuUsage}%</div>
+                        <div class="stat-label">${cpuCores} コア</div>
                     </div>
 
                     <div class="stat-card">
@@ -322,10 +424,10 @@
                             <div class="stat-icon">💾</div>
                             <h4>メモリ (Bot)</h4>
                         </div>
-                        <div class="stat-value">${data.memory.bot.used}</div>
-                        <div class="stat-label">MB / ${data.memory.bot.total} MB</div>
+                        <div class="stat-value">${botMemUsed} MB</div>
+                        <div class="stat-label">${botMemTotal} MB</div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${(data.memory.bot.used / data.memory.bot.total * 100).toFixed(1)}%"></div>
+                            <div class="progress-fill" style="width: ${botMemPercentage}%"></div>
                         </div>
                     </div>
 
@@ -334,42 +436,70 @@
                             <div class="stat-icon">🖥️</div>
                             <h4>メモリ (System)</h4>
                         </div>
-                        <div class="stat-value">${data.memory.system.used}</div>
-                        <div class="stat-label">GB / ${data.memory.system.total} GB</div>
+                        <div class="stat-value">${sysMemUsed} GB</div>
+                        <div class="stat-label">${sysMemTotal} GB</div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${data.memory.system.percentage}%"></div>
+                            <div class="progress-fill" style="width: ${sysMemPercentage}%"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="uptime-display">
                     <h4>⏱️ アップタイム</h4>
-                    <div class="uptime-value">${data.uptime.formatted}</div>
+                    <div class="uptime-value">${uptime}</div>
                 </div>
 
                 <div class="last-update">
-                    最終更新: ${new Date(data.lastUpdate).toLocaleString('ja-JP')}
+                    <span class="connection-status connected">🟢 接続中</span><br>
+                    最終更新: ${lastUpdate}
                 </div>
             `;
 
             document.getElementById('status-content').innerHTML = statusHTML;
         }
 
-        function displayError() {
+        // エラー表示
+        function displayError(error) {
             const errorHTML = `
                 <div class="error-message">
                     <h3>❌ ステータスを取得できません</h3>
                     <p>ボットがオフラインか、APIに接続できません。</p>
+                    <p>しばらくしてから再度お試しください。</p>
+                    <div style="margin-top: 20px;">
+                        <span class="connection-status disconnected">🔴 切断</span>
+                    </div>
                 </div>
             `;
+            
             document.getElementById('status-content').innerHTML = errorHTML;
         }
 
         // 初回読み込み
+        console.log('Initializing status monitor...');
+        console.log('API URL:', API_URL);
         fetchStatus();
 
         // 定期的に更新
         setInterval(fetchStatus, UPDATE_INTERVAL);
+
+        // ページの可視性が変わった時の処理
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && !isConnected) {
+                console.log('Page visible again, attempting to reconnect...');
+                fetchStatus();
+            }
+        });
+
+        // オンライン/オフライン検知
+        window.addEventListener('online', () => {
+            console.log('Network connection restored');
+            fetchStatus();
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('Network connection lost');
+            displayError(new Error('インターネット接続が切断されました'));
+        });
     </script>
 </body>
 </html>
