@@ -1,0 +1,27 @@
+{
+  "name": "dynamic-website",
+  "version": "1.0.0",
+  "description": "A dynamic website with HTML, CSS, and JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server --port=8080",
+    "dev": "live-server --port=8080 --watch=**/*.{html,css,js}",
+    "build": "echo 'No build step required for static HTML/CSS/JS'",
+    "lint:js": "eslint *.js",
+    "format": "prettier --write \"**/*.{html,css,js}\""
+  },
+  "keywords": [
+    "html",
+    "css",
+    "javascript",
+    "website"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "live-server": "^1.2.2",
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {}
+}
