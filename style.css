@@ -6,6 +6,23 @@ body {
     color: #ddd;
     line-height: 1.7;
     scroll-behavior: smooth;
+    /* テキストコピー禁止 */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* 画像の保護（全体適用） */
+img {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
 }
 
 /* === HEADER === */
@@ -389,12 +406,27 @@ p {
     box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
 }
 
-/* === SERVER GRID === */
+/* === SERVER GRID - 1列に2～3個表示 === */
 .server-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 30px;
     margin-top: 40px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 1200px) {
+    .server-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .server-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .server-card {
@@ -604,12 +636,28 @@ footer p {
         grid-template-columns: 1fr;
     }
 }
-/* サポートメンバー画像の保護 */
+
+/* サポートメンバー画像の保護（追加の保護） */
 .team-member img,
 .support-team img,
 img.member-avatar {
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+}
+
+/* 右クリック禁止（追加のセキュリティ） */
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* コンテキストメニュー無効化のためのスタイル */
+* {
     -webkit-touch-callout: none;
 }
