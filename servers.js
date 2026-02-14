@@ -28,7 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
             description: "みんな集まれ！マイクラ＆ロブロックスの最高の遊び場へ！",
             invite: "https://discord.gg/8xVZaW96DH",
         },
-        {   name: "GendaiMC",
+    　　 {
+            name: "GendaiMC",
             description: "カスタムされたサーバーで、最高の仲間と、未知の冒険へ。",
             invite: "https://discord.gg/fNv4MYBerz",
         }
