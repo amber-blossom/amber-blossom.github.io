@@ -14,9 +14,19 @@ document.addEventListener("DOMContentLoaded", () => {
             invite: "https://discord.gg/CVRsP4sDTV",
         },
         {
-            name: "作成中",
-            description: "作成中",
-            invite: "https://discord.gg/zzzzz",
+            name: "SharkBot Support",
+            description: "SharkBotの公式サポートサーバーです。",
+            invite: "https://discord.gg/mUyByHYMGk",
+        },
+        {
+            name: "神日京国",
+            description: "史上最大規模のテーマパークサーバー！",
+            invite: "https://discord.gg/jP7hg3eycC",
+        },
+        {
+            name: "ゲーム/防災情報コミュニティサーバー",
+            description: "みんな集まれ！マイクラ＆ロブロックスの最高の遊び場へ！",
+            invite: "https://discord.gg/8xVZaW96DH",
         }
     ];
 
