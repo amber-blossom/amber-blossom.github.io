@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 🔹 連携サーバー情報
     const servers = [
         {
-            name: "茜-あかね-公式サーバー",
+            name: "Amber-Blossomサポートサーバー",
             description: "茜-あかね-の公式サポートサーバーです。",
             invite: "https://discord.gg/a32WABB8Qv",
             badge: "公式",
