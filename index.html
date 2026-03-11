@@ -4,9 +4,471 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amber-Blossom</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
     <link rel="icon" href="/images/favicon.ico" id="favicon">
+    <style>
+        /* === GLOBAL STYLES === */
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e1e;
+            color: #ddd;
+            line-height: 1.7;
+            scroll-behavior: smooth;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
+            -khtml-user-select: none;
+        }
+
+        img {
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
+            -khtml-user-select: none;
+        }
+
+        /* === HEADER === */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            padding: 15px 30px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            box-sizing: border-box;
+            min-height: 70px;
+        }
+
+        .logo {
+            font-size: 28px;
+            color: #f39c12;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        nav {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            margin: 0 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            color: #bbb;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+            transform: translateY(-2px);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: #f39c12;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        nav a:hover::after {
+            width: 80%;
+        }
+
+        /* === HEADER RIGHT SECTION === */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        /* === CLOCK STYLES === */
+        .clock {
+            background: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            font-size: 14px;
+            white-space: nowrap;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* === MAIN === */
+        main {
+            padding-top: 100px;
+            padding-inline: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: radial-gradient(ellipse at center, rgba(243, 156, 18, 0.05) 0%, transparent 70%);
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: #fff;
+            margin-bottom: 25px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #bbb;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .install-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: #111;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .install-btn:hover {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.4);
+        }
+
+        /* === HEADINGS === */
+        h1, h2, h3 {
+            color: #f39c12;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 32px;
+            text-align: center;
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 12px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent 0%, #f39c12 50%, transparent 100%);
+        }
+
+        h2 {
+            font-size: 26px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        h3 {
+            font-size: 22px;
+        }
+
+        /* === PARAGRAPHS === */
+        p {
+            color: #ccc;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        /* === DISCORD WIDGET === */
+        .discord-widget-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px auto;
+        }
+
+        .discord-widget-container iframe {
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+
+        /* === SERVER GRID === */
+        .server-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 1200px) {
+            .server-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .server-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .server-card {
+            background: linear-gradient(135deg, #2d2d2d 0%, #333 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .server-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .server-card h3 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .server-card p {
+            margin-bottom: 20px;
+            color: #bbb;
+        }
+
+        .server-card button {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border: none;
+            color: #111;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .server-card button:hover {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
+        }
+
+        /* === SUPPORT TEAM === */
+        .support-team {
+            text-align: center;
+            background: linear-gradient(135deg, #1f1f1f 0%, #252525 100%);
+            padding: 50px 30px;
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .support-team h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .team-group {
+            margin-top: 40px;
+        }
+
+        /* === MODERATER GRID === */
+        .moderater-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+            justify-items: center;
+        }
+
+        .member-card {
+            background: linear-gradient(135deg, #222 0%, #2a2a2a 100%);
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 250px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .member-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .member-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 3px solid #f39c12;
+            object-fit: cover;
+        }
+
+        .member-card p, .member-card .comment {
+            margin: 8px 0;
+        }
+
+        .member-card .comment {
+            color: #f39c12;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        /* === SOCIAL LINKS === */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: #f39c12;
+            border: 2px solid #f39c12;
+            border-radius: 8px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .social-links a:hover {
+            background: #f39c12;
+            color: #111;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        /* === FOOTER === */
+        footer {
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            color: #888;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            border-top: 1px solid #333;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            header { padding: 12px 20px; }
+            .logo { font-size: 24px; }
+            nav ul { gap: 15px; }
+            nav a { padding: 6px 12px; font-size: 14px; }
+            .moderater-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+                min-height: auto;
+            }
+            nav { order: -1; margin: 0; width: 100%; }
+            nav ul { flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 10px; }
+            nav a { padding: 6px 10px; font-size: 13px; }
+            .clock { font-size: 12px; padding: 4px 8px; min-width: 100px; }
+            main { padding-top: 140px; padding-inline: 20px; }
+            .hero h1 { font-size: 36px; }
+            .server-grid { grid-template-columns: 1fr; gap: 20px; }
+            .social-links { flex-direction: column; align-items: center; }
+            .moderater-grid { grid-template-columns: repeat(2, 1fr); }
+            .discord-widget-container iframe { width: 100%; max-width: 350px; }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 10px 15px; }
+            .logo { font-size: 20px; }
+            nav ul { gap: 8px; }
+            nav a { padding: 4px 8px; font-size: 12px; }
+            .clock { font-size: 11px; padding: 3px 6px; min-width: 90px; }
+            main { padding-top: 130px; padding-inline: 15px; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 16px; }
+            .moderater-grid { grid-template-columns: 1fr; }
+        }
+
+        .team-member img, .support-team img, img.member-avatar {
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
+        }
+
+        * { -webkit-touch-callout: none; }
+    </style>
 </head>
 <body>
     <header>
@@ -18,17 +480,18 @@
                 <li><a href="privacy">プライバシーポリシー</a></li>
                 <li><a href="status">Botステータス</a></li>
                 <li><a href="servers">連携サーバー一覧</a></li>
-                <div id="clock" class="clock">--:--:--</div>
             </ul>
         </nav>
+        <div class="header-right">
+            <div id="clock" class="clock">--:--:--</div>
+        </div>
     </header>
 
     <main>
         <div class="hero">
             <h1>amber-blossom</h1>
             <p>茜-あかね- 心春-こはる-をサポート、運営しています。</p>
-            
-            <!-- 公式リンク（最初に配置） -->
+
             <div class="official-links" style="margin: 30px 0;">
                 <h2>公式リンク</h2>
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
@@ -38,11 +501,9 @@
             </div>
         </div>
 
-        <!-- Discord参加者数 -->
-        <div class="status-card">
-            <h3>Discordサーバー統計</h3>
-            <p>参加者数: <span id="member-count">読み込み中...</span></p>
-            <p>オンライン: <span id="online-count">読み込み中...</span></p>
+        <!-- Discord ウィジェット -->
+        <div class="discord-widget-container">
+            <iframe src="https://discord.com/widget?id=1315647461989285918&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </div>
 
         <!-- 他のページへのリンク -->
@@ -52,24 +513,24 @@
                 <p>多機能botです。ログインボーナスなどを備えています。</p>
                 <button onclick="window.location.href='akane/docs'">詳細を見る</button>
             </div>
-            
+
             <div class="server-card">
                 <h3>心春-こはる-</h3>
                 <p>多機能botです。茜-あかね-にはない機能を備えています。</p>
                 <button onclick="window.location.href='koharu/docs'">詳細を見る</button>
-            </div>            
+            </div>
+
             <div class="server-card">
                 <h3>Botステータス</h3>
                 <p>稼働状況確認</p>
-                <button onclick="window.location.href='status.html'">確認する</button>
+                <button onclick="window.location.href='status'">確認する</button>
             </div>
         </div>
 
         <!-- サポートチームセクション -->
         <section class="support-team">
             <h2>サポートチーム</h2>
-            
-            <!-- Top メンバー -->
+
             <div class="team-group">
                 <h3>Top</h3>
                 <div class="member-card">
@@ -77,15 +538,13 @@
                     <p>名前: あおい</p>
                     <p>役割: 開発者</p>
                     <p class="comment">茜-あかね-の開発者であり、開発や運営をしています。</p>
-                    <!-- ソーシャルリンク -->
                     <div class="social-links">
                         <a href="https://x.com/aoi_tyandesu" target="_blank">X</a>
                         <a href="https://github.com/aoikozu" target="_blank">GitHub</a>
                     </div>
                 </div>
             </div>
-            
-            <!-- Subtop メンバー -->
+
             <div class="team-group">
                 <h3>Subtop</h3>
                 <div class="member-card">
@@ -93,44 +552,37 @@
                     <p>名前: Yu2pu1s</p>
                     <p>役割: 副開発者</p>
                     <p class="comment">葵さんの忠実なる眷属です</p>
-                    <!-- ソーシャルリンク -->
                     <div class="social-links">
                         <a href="https://github.com/Yu2pu1" target="_blank">GitHub</a>
                         <a href="https://x.com/yutupui8722" target="_blank">X</a>
                     </div>
                 </div>
             </div>
-            
-            <!-- Moderater メンバー -->
+
             <div class="team-group">
                 <h3>Moderater</h3>
                 <div class="moderater-grid">
-                    <!-- Moderater 1 -->
                     <div class="member-card">
                         <img src="images/moderater1.jpg" alt="Moderater 1">
                         <p>名前: 紅蓮ノヴァ</p>
                         <p>役割: モデレーター</p>
                         <p class="comment">安心してご利用いただけるよう全力でサポートさせていただきます。</p>
-                        <!-- ソーシャルリンク -->
                         <div class="social-links">
                             <a href="https://guren-nova.net/" target="_blank">Web</a>
                             <a href="https://github.com/guren-nova" target="_blank">GitHub</a>
                         </div>
                     </div>
 
-                    <!-- Moderater 2 -->
                     <div class="member-card">
                         <img src="images/moderater2.jpg" alt="Moderater 2">
                         <p>名前: Yuyuto</p>
                         <p>役割: モデレーター</p>
                         <p class="comment">より一層のDiscordライフを安心安全にお送りします</p>
-                        <!-- ソーシャルリンク -->
                         <div class="social-links">
                             <a href="https://github.com/Yuyuto000" target="_blank">GitHub</a>
                         </div>
                     </div>
 
-                    <!-- Moderater 3 -->
                     <div class="member-card">
                         <img src="images/moderater3.jpg" alt="Moderater 3">
                         <p>名前: 스즈미 쿠즈는</p>
@@ -138,32 +590,27 @@
                         <p class="comment">作成中</p>
                     </div>
 
-                    <!-- Moderater 4 -->
                     <div class="member-card">
                         <img src="images/moderater4.jpg" alt="Moderater 4">
                         <p>名前: ゆううゆ</p>
                         <p>役割: モデレーター</p>
                         <p class="comment">ユーザーの皆様が笑顔で使えるようにサポートさせていただきます</p>
-                        <!-- ソーシャルリンク -->
                         <div class="social-links">
                             <a href="https://x.com/yuuuyu0000" target="_blank">X</a>
                             <a href="https://github.com/yuuuyu1" target="_blank">GitHub</a>
                         </div>
                     </div>
 
-                    <!-- Moderater 5 -->
                     <div class="member-card">
                         <img src="images/moderater5.jpg" alt="Moderater 5">
                         <p>名前: chaicharo</p>
                         <p>役割: モデレーター</p>
                         <p class="comment">皆様のdiscordを安心安全に利用してもらうため、日々サポートさせてもらいます。</p>
-                        <!-- ソーシャルリンク -->
                         <div class="social-links">
                             <a href="https://github.com/chaicharo" target="_blank">GitHub</a>
                         </div>
                     </div>
 
-                    <!-- Moderater 6 -->
                     <div class="member-card">
                         <img src="images/moderater6.jpg" alt="Moderater 6">
                         <p>名前: 暇な人</p>
@@ -171,7 +618,6 @@
                         <p class="comment">ユーザーの皆様が使いやすいようにサポートします</p>
                     </div>
 
-                    <!-- Moderater 7 -->
                     <div class="member-card">
                         <img src="images/moderater7.jpg" alt="Moderater 7">
                         <p>名前: shun_game11</p>
@@ -179,7 +625,6 @@
                         <p class="comment">ユーザー様のご不便が無いよう尽力します。</p>
                     </div>
 
-                    <!-- Moderater 8 -->
                     <div class="member-card">
                         <img src="images/moderater8.jpg" alt="Moderater 8">
                         <p>名前: KJ_87</p>
@@ -196,35 +641,17 @@
     </footer>
 
     <script>
-        // Discord参加者数を取得する関数（実際のAPIエンドポイントに合わせて変更してください）
-        async function updateMemberCount() {
-            try {
-                // 実際のDiscord APIまたは独自APIのエンドポイントに変更
-                const response = await fetch('/api/discord/stats');
-                const data = await response.json();
-                
-                document.getElementById('member-count').textContent = data.memberCount || '取得失敗';
-                document.getElementById('online-count').textContent = data.onlineCount || '取得失敗';
-            } catch (error) {
-                document.getElementById('member-count').textContent = '取得失敗';
-                document.getElementById('online-count').textContent = '取得失敗';
-            }
-        }
-
-        // ページ読み込み時に実行
         document.addEventListener('DOMContentLoaded', function() {
-            updateMemberCount();
-            
-            // 時計機能
             function updateClock() {
                 const now = new Date();
-                const timeString = now.toLocaleTimeString('ja-JP');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
                 const clockElement = document.getElementById('clock');
                 if (clockElement) {
-                    clockElement.textContent = timeString;
+                    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
                 }
             }
-            
             setInterval(updateClock, 1000);
             updateClock();
         });
@@ -236,7 +663,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-7Q3C5WF65W');
     </script>
 </body>
