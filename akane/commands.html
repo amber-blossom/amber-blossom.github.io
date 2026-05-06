@@ -6,17 +6,142 @@
     <title>茜-あかね- Docs - コマンド一覧</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<link rel="icon" href="/images/favicon.ico" id="favicon">
+    <link rel="icon" href="/images/favicon.ico" id="favicon">
+    <style>
+        /* ─── コマンドページ専用スタイル ─── */
+        .cmd-search-wrap {
+            margin: 0 0 32px;
+            position: relative;
+        }
+        .cmd-search-wrap i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            pointer-events: none;
+        }
+        .cmd-search {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color .2s;
+        }
+        .cmd-search:focus { border-color: #7c6bff; }
+
+        /* カテゴリタブ */
+        .cmd-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+        .cmd-tab {
+            padding: 7px 18px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            background: #1a1a2e;
+            color: #aaa;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+        .cmd-tab:hover { border-color: #7c6bff; color: #fff; }
+        .cmd-tab.active { background: #7c6bff; border-color: #7c6bff; color: #fff; font-weight: 600; }
+
+        /* カテゴリブロック */
+        .cmd-category { margin-bottom: 40px; }
+        .cmd-category-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a45;
+            color: #e0e0e0;
+        }
+        .cmd-category-title i { color: #7c6bff; font-size: 16px; }
+
+        /* コマンドカード */
+        .cmd-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+        }
+        .cmd-card {
+            background: #1a1a2e;
+            border: 1px solid #2a2a45;
+            border-radius: 10px;
+            padding: 16px 18px;
+            transition: border-color .2s, transform .15s;
+        }
+        .cmd-card:hover { border-color: #7c6bff; transform: translateY(-2px); }
+        .cmd-card.hidden { display: none; }
+
+        .cmd-name {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: #a78bfa;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cmd-badge {
+            font-family: sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: .3px;
+        }
+        .badge-admin  { background: rgba(239,68,68,.15);  color: #f87171; border: 1px solid rgba(239,68,68,.3); }
+        .badge-owner  { background: rgba(245,158,11,.15); color: #fbbf24; border: 1px solid rgba(245,158,11,.3); }
+        .badge-all    { background: rgba(34,197,94,.15);  color: #4ade80; border: 1px solid rgba(34,197,94,.3); }
+
+        .cmd-desc {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        /* 統計バー */
+        .cmd-stats {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            background: #1a1a2e;
+            border: 1px solid #2a2a45;
+            border-radius: 10px;
+            padding: 16px 24px;
+            margin-bottom: 28px;
+        }
+        .cmd-stat { font-size: 13px; color: #aaa; }
+        .cmd-stat strong { color: #a78bfa; font-size: 20px; display: block; }
+
+        /* hidden カテゴリ */
+        .cmd-category.cat-hidden { display: none; }
+    </style>
 </head>
 <body>
     <header class="header">
         <h1><i class="fas fa-list"></i> 茜-あかね- Docs - コマンド一覧</h1>
     </header>
+
     <div class="hamburger" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>    
+        <div></div><div></div><div></div>
+    </div>
+
     <nav class="nav">
         <a href="docs"><i class="fas fa-home"></i> ホーム</a>
         <a href="install"><i class="fas fa-download"></i> 導入方法</a>
@@ -27,37 +152,243 @@
     </nav>
 
     <main class="content">
-        <h2>利用可能なコマンド</h2>
-        <table>
-            <tr>
-                <th>コマンド</th>
-                <th>説明</th>
-            </tr>
-            <tr>
-                <td>/rolepanel</td>
-                <td>ロールパネルを作成します。(管理者のみ使用可能)</td>
-            </tr>
-            <tr>
-                <td>/ticket</td>
-                <td>(管理者のみ使用可能)</td>
-            </tr>
-            <tr>
-                <th>/voice</th>
-                <th>vcに参加し、読み上げます(管理者以外も使用可能)</th>
-            </tr>
-            <tr>
-                <th>/daily</th>
-                <th>1日一回デイリーボーナスがもらえます。</th>
-            </tr>
-            <tr>
-                <th>/work</th>
-                <th>10分に一回コインを稼ぐことができます。</th>
-            </tr>
-            <tr>
-                <th>/vchub</th>
-                <th>参加するだけで個室vcを作れるvcを作成します。(管理者のみ使用可能)</th>
-            </tr>
-        </table>
+        <h2>利用可能なコマンド一覧</h2>
+
+        <!-- 統計 -->
+        <div class="cmd-stats">
+            <div class="cmd-stat"><strong>25</strong>コマンド</div>
+            <div class="cmd-stat"><strong>9</strong>カテゴリ</div>
+            <div class="cmd-stat"><strong id="stat-all">16</strong>全員使用可能</div>
+            <div class="cmd-stat"><strong>9</strong>管理者専用</div>
+        </div>
+
+        <!-- 検索 -->
+        <div class="cmd-search-wrap">
+            <i class="fas fa-search"></i>
+            <input class="cmd-search" type="text" id="cmd-search" placeholder="コマンドを検索... (例: /ban, daily, slot)">
+        </div>
+
+        <!-- タブ -->
+        <div class="cmd-tabs">
+            <button class="cmd-tab active" data-cat="all">すべて</button>
+            <button class="cmd-tab" data-cat="common">📋 共通</button>
+            <button class="cmd-tab" data-cat="admin">🛡️ 管理</button>
+            <button class="cmd-tab" data-cat="economy">💰 経済</button>
+            <button class="cmd-tab" data-cat="game">🎮 ゲーム</button>
+            <button class="cmd-tab" data-cat="loginbonus">🎁 ログインボーナス</button>
+            <button class="cmd-tab" data-cat="globalchat">🌐 グローバルチャット</button>
+            <button class="cmd-tab" data-cat="panel">🎭 パネル・チケット</button>
+            <button class="cmd-tab" data-cat="vc">🔊 VC</button>
+            <button class="cmd-tab" data-cat="util">🔧 ユーティリティ</button>
+        </div>
+
+        <!-- 📋 共通 -->
+        <div class="cmd-category" data-category="common">
+            <div class="cmd-category-title"><i class="fas fa-list"></i> 共通コマンド</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/help">
+                    <div class="cmd-name">/help <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">コマンド一覧とヘルプを表示します。</div>
+                </div>
+                <div class="cmd-card" data-name="/ping">
+                    <div class="cmd-name">/ping <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">Botの応答速度とWebSocket遅延を確認します。</div>
+                </div>
+                <div class="cmd-card" data-name="/serverinfo">
+                    <div class="cmd-name">/serverinfo <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">サーバーのメンバー数・チャンネル数・ブースト情報などを表示します。</div>
+                </div>
+                <div class="cmd-card" data-name="/userinfo">
+                    <div class="cmd-name">/userinfo <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">ユーザーのロール・参加日・IDなどの情報を表示します。対象省略時は自分の情報を表示。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🛡️ 管理 -->
+        <div class="cmd-category" data-category="admin">
+            <div class="cmd-category-title"><i class="fas fa-shield-alt"></i> 管理コマンド</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/ban">
+                    <div class="cmd-name">/ban <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">ユーザーをBANします。メッセージ削除日数（0〜7日）の指定が可能です。</div>
+                </div>
+                <div class="cmd-card" data-name="/kick">
+                    <div class="cmd-name">/kick <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">ユーザーをサーバーからキックします。</div>
+                </div>
+                <div class="cmd-card" data-name="/timeout">
+                    <div class="cmd-name">/timeout <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">ユーザーをタイムアウトします。60秒〜1週間の期間を選択できます。</div>
+                </div>
+                <div class="cmd-card" data-name="/admin">
+                    <div class="cmd-name">/admin <span class="cmd-badge badge-owner">Bot管理者</span></div>
+                    <div class="cmd-desc">Botの詳細ステータス確認・全サーバーへのブロードキャスト送信などの管理操作を行います。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 💰 経済 -->
+        <div class="cmd-category" data-category="economy">
+            <div class="cmd-category-title"><i class="fas fa-coins"></i> 経済システム</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/balance">
+                    <div class="cmd-name">/balance <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">残高とサーバー内順位を確認します。対象ユーザーを指定して他の人の残高も確認可能。</div>
+                </div>
+                <div class="cmd-card" data-name="/daily">
+                    <div class="cmd-name">/daily <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">デイリー報酬（200コイン）を受け取ります。毎日日本時間0:00にリセットされます。</div>
+                </div>
+                <div class="cmd-card" data-name="/work">
+                    <div class="cmd-name">/work <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">仕事をしてコインを稼ぎます。10分のクールダウンがあり、50〜150コインをランダムで獲得。</div>
+                </div>
+                <div class="cmd-card" data-name="/pay">
+                    <div class="cmd-name">/pay <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">他のユーザーにコインを送金します。残高不足の場合はエラーが表示されます。</div>
+                </div>
+                <div class="cmd-card" data-name="/shop list /shop buy">
+                    <div class="cmd-name">/shop <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc"><code>list</code>で商品一覧を表示、<code>buy</code>でコインを使って商品を購入できます。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🎮 ゲーム -->
+        <div class="cmd-category" data-category="game">
+            <div class="cmd-category-title"><i class="fas fa-gamepad"></i> ゲーム・ランキング</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/slot">
+                    <div class="cmd-name">/slot <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">スロットマシンで遊びます。10〜1000コインを賭けて最大50倍の払い戻しを狙えます。</div>
+                </div>
+                <div class="cmd-card" data-name="/omikuji">
+                    <div class="cmd-name">/omikuji <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">1日1回おみくじを引けます。大吉〜大凶の7段階で、結果に応じてコインボーナスがあります。日本時間0:00リセット。</div>
+                </div>
+                <div class="cmd-card" data-name="/leaderboard">
+                    <div class="cmd-name">/leaderboard <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">サーバーのランキングを表示します。コイン残高・累計獲得・ログイン連続日数の3種類に対応。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🎁 ログインボーナス -->
+        <div class="cmd-category" data-category="loginbonus">
+            <div class="cmd-category-title"><i class="fas fa-gift"></i> ログインボーナス</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/loginbonus check">
+                    <div class="cmd-name">/loginbonus check <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">自分のログインボーナス状況と次のマイルストーンまでの残り日数を確認します。</div>
+                </div>
+                <div class="cmd-card" data-name="/loginbonus info">
+                    <div class="cmd-name">/loginbonus info <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">次回リセット日時とボーナス報酬一覧（連続日数別）を確認します。</div>
+                </div>
+                <div class="cmd-card" data-name="/loginbonus ranking">
+                    <div class="cmd-name">/loginbonus ranking <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">サーバー内のログイン連続日数ランキングを表示します。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🌐 グローバルチャット -->
+        <div class="cmd-category" data-category="globalchat">
+            <div class="cmd-category-title"><i class="fas fa-globe"></i> グローバルチャット</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/globalchat setup">
+                    <div class="cmd-name">/globalchat setup <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">このチャンネルをグローバルチャットに設定します。他のサーバーのメッセージが届くようになります。</div>
+                </div>
+                <div class="cmd-card" data-name="/globalchat remove">
+                    <div class="cmd-name">/globalchat remove <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">このチャンネルのグローバルチャット設定を解除します。</div>
+                </div>
+                <div class="cmd-card" data-name="/globalchat list">
+                    <div class="cmd-name">/globalchat list <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">現在グローバルチャットに接続しているサーバー一覧を表示します。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🎭 パネル・チケット -->
+        <div class="cmd-category" data-category="panel">
+            <div class="cmd-category-title"><i class="fas fa-columns"></i> ロールパネル・固定メッセージ・チケット</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/rolepanel create">
+                    <div class="cmd-name">/rolepanel create <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">セレクトメニュー式のロールパネルを作成します。ロールIDをカンマ区切りで指定。</div>
+                </div>
+                <div class="cmd-card" data-name="/rolepanel delete /rolepanel list">
+                    <div class="cmd-name">/rolepanel delete / list <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">パネルの削除と一覧確認ができます。</div>
+                </div>
+                <div class="cmd-card" data-name="/pin set">
+                    <div class="cmd-name">/pin set <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">チャンネルに固定メッセージを設定します。既存の固定メッセージは自動で削除されます。</div>
+                </div>
+                <div class="cmd-card" data-name="/pin info /pin remove">
+                    <div class="cmd-name">/pin info / remove <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">現在の固定メッセージ情報の確認と削除ができます。</div>
+                </div>
+                <div class="cmd-card" data-name="/ticket setup">
+                    <div class="cmd-name">/ticket setup <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">チケットパネルを設置します。ボタンを押すとプライベートチャンネルが自動作成されます。</div>
+                </div>
+                <div class="cmd-card" data-name="/ticket delete">
+                    <div class="cmd-name">/ticket delete <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">チケットパネルを削除します。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔊 VC -->
+        <div class="cmd-category" data-category="vc">
+            <div class="cmd-category-title"><i class="fas fa-microphone"></i> VC・音声</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/vchub create">
+                    <div class="cmd-name">/vchub create <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">VCハブを作成します。参加するだけで個人VCが自動生成され、退出すると自動削除されます。</div>
+                </div>
+                <div class="cmd-card" data-name="/vchub delete /vchub list">
+                    <div class="cmd-name">/vchub delete / list <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">VCハブの削除と一覧確認ができます。</div>
+                </div>
+                <div class="cmd-card" data-name="/voice join">
+                    <div class="cmd-name">/voice join <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">VCに参加して読み上げを開始します。チャンネルを省略すると現在参加中のVCに接続します。</div>
+                </div>
+                <div class="cmd-card" data-name="/voice leave">
+                    <div class="cmd-name">/voice leave <span class="cmd-badge badge-all">全員</span></div>
+                    <div class="cmd-desc">VCから退出して読み上げを停止します。</div>
+                </div>
+                <div class="cmd-card" data-name="/voice setup /voice remove">
+                    <div class="cmd-name">/voice setup / remove <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">自動参加VCの設定・解除ができます。指定したVCに誰かが参加するとBotが自動で参加します。</div>
+                </div>
+                <div class="cmd-card" data-name="/vcmodpanel">
+                    <div class="cmd-name">/vcmodpanel <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">VCモデレーションパネルを作成します。ミュート・デフ・キック・ロック操作がボタンで行えます。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔧 ユーティリティ -->
+        <div class="cmd-category" data-category="util">
+            <div class="cmd-category-title"><i class="fas fa-tools"></i> ユーティリティ</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-name="/upreminder setup">
+                    <div class="cmd-name">/upreminder setup <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">Fortify BotのUPを検知して通知します。1時間後に再度リマインドします。メンションするロールを指定可能。</div>
+                </div>
+                <div class="cmd-card" data-name="/upreminder remove /upreminder status">
+                    <div class="cmd-name">/upreminder remove / status <span class="cmd-badge badge-admin">管理者</span></div>
+                    <div class="cmd-desc">UPリマインダーの解除と現在の設定確認ができます。</div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="footer">
@@ -65,11 +396,59 @@
         <p>多機能Botに関する質問やサポートが必要な場合は、サポートチームまでご連絡ください。24時間以内に対応いたします。</p>
         <p>このドキュメントは常に最新情報を提供することを目指しています。新しい機能や改善点があれば、随時アップデートいたします。</p>
     </footer>
+
     <script>
         function toggleMenu() {
             document.querySelector('.nav').classList.toggle('active');
             document.querySelector('.hamburger').classList.toggle('active');
         }
+
+        // ─── タブ切替 ───
+        const tabs       = document.querySelectorAll('.cmd-tab');
+        const categories = document.querySelectorAll('.cmd-category');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const cat = tab.dataset.cat;
+                categories.forEach(c => {
+                    if (cat === 'all' || c.dataset.category === cat) {
+                        c.classList.remove('cat-hidden');
+                    } else {
+                        c.classList.add('cat-hidden');
+                    }
+                });
+
+                // 検索をリセット
+                document.getElementById('cmd-search').value = '';
+                document.querySelectorAll('.cmd-card').forEach(card => card.classList.remove('hidden'));
+            });
+        });
+
+        // ─── 検索 ───
+        document.getElementById('cmd-search').addEventListener('input', function () {
+            const q = this.value.toLowerCase().replace(/^\//, '');
+
+            // タブをすべてに戻す
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-cat="all"]').classList.add('active');
+            categories.forEach(c => c.classList.remove('cat-hidden'));
+
+            document.querySelectorAll('.cmd-card').forEach(card => {
+                const name = card.dataset.name?.toLowerCase() ?? '';
+                const desc = card.querySelector('.cmd-desc')?.textContent.toLowerCase() ?? '';
+                card.classList.toggle('hidden', q !== '' && !name.includes(q) && !desc.includes(q));
+            });
+
+            // カテゴリ内が全部hidden なら カテゴリ自体を隠す
+            categories.forEach(cat => {
+                const cards    = cat.querySelectorAll('.cmd-card');
+                const allHidden = [...cards].every(c => c.classList.contains('hidden'));
+                cat.classList.toggle('cat-hidden', allHidden && q !== '');
+            });
+        });
     </script>
 </body>
 </html>
@@ -79,6 +458,5 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-7Q3C5WF65W');
 </script>
